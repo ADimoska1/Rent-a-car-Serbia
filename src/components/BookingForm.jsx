@@ -81,6 +81,19 @@ function BookingForm({ onBookingComplete }) {
     }
   }
 
+  const resetCustomerInfo = () => {
+    setBookingData(prev => ({
+      ...prev,
+      customerInfo: {
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: '',
+        flightNumber: ''
+      }
+    }))
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     
@@ -124,9 +137,26 @@ function BookingForm({ onBookingComplete }) {
       }
 
       alert(message)
+
+      // Reset customer info fields
+      resetCustomerInfo()
+
+      // Deselect car and navigate back to step 1 (Choose a car) after a short delay
+      setTimeout(() => {
+        setBookingData(prev => ({ ...prev, selectedCar: null }))
+        setStep(1)
+      }, 500)
+
     } catch (error) {
       console.error('Error submitting reservation:', error)
       alert('Reservation received! We will contact you soon. (Note: Notification service error)')
+      
+      // Still reset and navigate even if there's an error
+      resetCustomerInfo()
+      setTimeout(() => {
+        setBookingData(prev => ({ ...prev, selectedCar: null }))
+        setStep(1)
+      }, 500)
     } finally {
       // Reset button
       if (submitButton) {
