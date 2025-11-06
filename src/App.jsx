@@ -17,11 +17,11 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-dark-bg">
       <Navbar />
       <main className="flex-grow pt-16">
         <Hero />
-        <div id="about" className="py-8">
+        <div id="about" className="py-12 bg-dark-bg">
           <BookingForm onBookingComplete={handleBookingComplete} />
         </div>
         <AdditionalServices />

@@ -1,27 +1,54 @@
 // src/cars.js
 
+// Helper function to generate 360 image array (optional - use if you have sequential images)
+const generate360Images = (carName, totalImages = 36) => {
+  const images = []
+  const folderName = carName.toLowerCase().replace(/\s+/g, '-')
+  for (let i = 1; i <= totalImages; i++) {
+    const num = String(i).padStart(3, '0')
+    images.push(`/images/cars/${folderName}/${folderName}-${num}.jpg`)
+  }
+  return images
+}
+
 export const cars = [
   {
     id: 1,
     name: "Skoda Fabia",
+    brand: "SKODA",
+    engine: "1.4 TDI",
     pricePerDay: 25,
-    imageUrl: "/images/skoda-fabia.jpg", // You'll add this image to public/images/
+    imageUrl: "/images/skoda-fabia.jpg", // Main image
+    // Uncomment and add your 360 images when ready:
+    // images360: generate360Images("Skoda Fabia", 36),
+    // Or manually specify:
+    // images360: [
+    //   "/images/cars/skoda-fabia/skoda-fabia-001.jpg",
+    //   "/images/cars/skoda-fabia/skoda-fabia-002.jpg",
+    //   // ... add all 36 images
+    // ],
     features: ["5 Seats", "Manual", "A/C", "10km/l"],
     category: "Economy"
   },
   {
     id: 2,
     name: "Volkswagen Golf",
+    brand: "VOLKSWAGEN",
+    engine: "1.6 TDI",
     pricePerDay: 35,
-    imageUrl: "/images/vw-golf.jpg", // You'll add this image to public/images/
+    imageUrl: "/images/vw-golf.jpg",
+    // images360: generate360Images("Volkswagen Golf", 36),
     features: ["5 Seats", "Automatic", "A/C", "12km/l"],
     category: "Standard"
   },
   {
     id: 3,
     name: "Fiat Punto",
+    brand: "FIAT",
+    engine: "1.3",
     pricePerDay: 20,
-    imageUrl: "/images/fiat-punto.jpg", // You'll add this image to public/images/
+    imageUrl: "/images/fiat-punto.jpg",
+    // images360: generate360Images("Fiat Punto", 36),
     features: ["5 Seats", "Manual", "A/C", "9km/l"],
     category: "Economy"
   }
