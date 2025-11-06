@@ -234,12 +234,13 @@ export const sendReservationNotifications = async (bookingData) => {
     results.email = { success: false, message: error.message }
   }
 
-  // Send SMS
-  try {
-    results.sms = await sendReservationSMS(bookingData)
-  } catch (error) {
-    results.sms = { success: false, message: error.message }
-  }
+  // Send SMS - TEMPORARILY DISABLED (uncomment when ready to test SMS)
+  // try {
+  //   results.sms = await sendReservationSMS(bookingData)
+  // } catch (error) {
+  //   results.sms = { success: false, message: error.message }
+  // }
+  results.sms = { success: false, message: 'SMS temporarily disabled' }
 
   return results
 }
