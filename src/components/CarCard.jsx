@@ -1,10 +1,15 @@
+import { getCarImage } from '../cars'
+
 function CarCard({ car }) {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
       <img
-        src={car.imageUrl}
+        src={getCarImage(car)}
         alt={car.name}
         className="w-full h-48 object-cover"
+        onError={(e) => {
+          e.target.src = `https://placehold.co/600x400/E5E7EB/333?text=${encodeURIComponent(car.name)}`
+        }}
       />
       <div className="p-6">
         <h3 className="text-2xl font-bold text-gray-800 mb-2">{car.name}</h3>
