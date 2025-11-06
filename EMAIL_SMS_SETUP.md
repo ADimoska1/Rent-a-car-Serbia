@@ -133,6 +133,10 @@ VITE_EMAILJS_PUBLIC_KEY=your_public_key_here
 
 ## 📱 SMS Notifications
 
+**Important:** SMS is sent to BOTH:
+- ✅ Customer's phone number (confirmation)
+- ✅ Admin phone: +381628952938 (notification with full details)
+
 ### Option 1: EmailJS SMS (If Available)
 
 Some EmailJS plans include SMS. Check your EmailJS dashboard for SMS service availability.

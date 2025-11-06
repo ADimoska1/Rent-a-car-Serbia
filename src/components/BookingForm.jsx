@@ -117,6 +117,7 @@ function BookingForm({ onBookingComplete }) {
       }
       if (smsSuccess) {
         message += '\n✓ Confirmation SMS sent to your phone.'
+        // Note: Admin also receives SMS notification automatically
       }
       if (!emailSuccess && !smsSuccess) {
         message = 'Reservation received! However, notifications could not be sent. We will contact you manually.'
