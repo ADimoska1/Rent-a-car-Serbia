@@ -54,17 +54,27 @@ export const sendReservationEmail = async (bookingData) => {
     }
 
     // Send email using EmailJS
-    const response = await emailjs.send(
-      EMAILJS_SERVICE_ID,
-      EMAILJS_TEMPLATE_ID,
-      templateParams
-    )
+    try {
+      const response = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams
+      )
 
-    console.log('Email sent successfully:', response)
-    return { success: true, message: 'Email sent successfully' }
+      console.log('✅ Email sent successfully:', response)
+      return { success: true, message: 'Email sent successfully' }
+    } catch (emailError) {
+      console.error('❌ EmailJS Error:', emailError)
+      // If template not found or other EmailJS error
+      if (emailError.text) {
+        console.error('EmailJS Error Details:', emailError.text)
+        return { success: false, message: 'Email template not found. Please check EmailJS template ID.' }
+      }
+      return { success: false, message: 'Failed to send email: ' + emailError.message }
+    }
   } catch (error) {
-    console.error('Error sending email:', error)
-    return { success: false, message: 'Failed to send email', error }
+    console.error('❌ Error in sendReservationEmail:', error)
+    return { success: false, message: 'Failed to send email', error: error.message }
   }
 }
 
@@ -123,7 +133,14 @@ const sendSingleSMS = async (phoneNumber, message) => {
     // Option 1: Use backend API (recommended for production)
     const BACKEND_API_URL = import.meta.env.VITE_BACKEND_API_URL || '/api/send-sms'
     
+    console.log('🔍 SMS Debug - Backend API URL:', BACKEND_API_URL)
+    console.log('🔍 SMS Debug - Phone:', phoneNumber)
+    console.log('🔍 SMS Debug - Message length:', message.length)
+    
+    // Always try to call the backend API if URL is set
     if (BACKEND_API_URL && BACKEND_API_URL !== '/api/send-sms') {
+      console.log('📤 Attempting to send SMS via backend API...')
+      
       // Call your backend API
       const response = await fetch(BACKEND_API_URL, {
         method: 'POST',
@@ -134,11 +151,16 @@ const sendSingleSMS = async (phoneNumber, message) => {
         })
       })
 
+      console.log('📥 SMS API Response status:', response.status)
+
       if (!response.ok) {
-        throw new Error(`SMS API error: ${response.statusText}`)
+        const errorText = await response.text()
+        console.error('❌ SMS API Error:', errorText)
+        throw new Error(`SMS API error: ${response.status} ${response.statusText}`)
       }
 
       const result = await response.json()
+      console.log('✅ SMS sent successfully:', result)
       return { success: true, message: 'SMS sent successfully', data: result }
     }
 
@@ -159,8 +181,9 @@ const sendSingleSMS = async (phoneNumber, message) => {
 
     // For development/testing - log the SMS that would be sent
     console.log(`📱 SMS to ${phoneNumber}:`, message)
-    console.log('⚠️ SMS not actually sent - Backend API required. See SMS_SETUP_GUIDE.md for setup instructions.')
-    return { success: false, message: 'SMS service not configured - backend API required' }
+    console.log('⚠️ SMS not actually sent - Backend API URL not configured or using default path')
+    console.log('💡 Tip: Set VITE_BACKEND_API_URL in your .env file or Vercel environment variables')
+    return { success: false, message: 'SMS service not configured - backend API URL required' }
   } catch (error) {
     console.error(`Error sending SMS to ${phoneNumber}:`, error)
     return { success: false, message: error.message, error }
